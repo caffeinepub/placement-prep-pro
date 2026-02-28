@@ -244,24 +244,47 @@ export function AIAssistant() {
         content: m.content,
       }));
 
-      const response = await fetch("https://text.pollinations.ai/openai", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "openai",
-          messages: [
-            { role: "system", content: AI_SYSTEM_PROMPT },
-            ...conversationHistory,
-            { role: "user", content: trimmed },
-          ],
-          temperature: 0.7,
-          max_tokens: 800,
-        }),
-      });
+      const makeRequest = async (model: string) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-      if (!response.ok) throw new Error("API error");
+        try {
+          const response = await fetch("https://text.pollinations.ai/openai", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Referer: "https://gars-x.app",
+            },
+            signal: controller.signal,
+            body: JSON.stringify({
+              model,
+              messages: [
+                { role: "system", content: AI_SYSTEM_PROMPT },
+                ...conversationHistory,
+                { role: "user", content: trimmed },
+              ],
+              temperature: 0.7,
+              max_tokens: 1000,
+            }),
+          });
+          clearTimeout(timeoutId);
+          if (!response.ok) throw new Error(`API error: ${response.status}`);
+          return await response.json();
+        } catch (err) {
+          clearTimeout(timeoutId);
+          throw err;
+        }
+      };
 
-      const data = await response.json();
+      let data: Record<string, unknown>;
+      try {
+        data = await makeRequest("openai-large");
+      } catch {
+        // Retry with base model after 1 second
+        await new Promise((r) => setTimeout(r, 1000));
+        data = await makeRequest("openai");
+      }
+
       const aiText: string =
         data.choices?.[0]?.message?.content ||
         "I'm sorry, I couldn't process that. Please try again.";
@@ -275,6 +298,10 @@ export function AIAssistant() {
       ]);
 
       let displayText = "";
+      const isInsideCodeBlock = () => {
+        const matches = displayText.match(/```/g);
+        return matches && matches.length % 2 !== 0;
+      };
       for (let i = 0; i < aiText.length; i++) {
         displayText += aiText[i];
         const currentText = displayText;
@@ -283,16 +310,16 @@ export function AIAssistant() {
             m.id === aiMsgId ? { ...m, content: currentText } : m,
           ),
         );
-        // Small delay for typewriter effect — skip most chars inside code blocks for speed
-        if (i % 3 === 0) await new Promise((r) => setTimeout(r, 10));
+        // Faster typewriter inside code blocks (skip every 2 chars), slower outside
+        const step = isInsideCodeBlock() ? 2 : 3;
+        if (i % step === 0) await new Promise((r) => setTimeout(r, 10));
       }
     } catch {
       setIsThinking(false);
       const fallbackMsg: Message = {
         id: `ai-${Date.now()}`,
         role: "ai",
-        content:
-          "I'm having trouble connecting right now. Please check your internet connection and try again. In the meantime, feel free to use the coding practice or roadmap sections!",
+        content: "The AI is temporarily busy. Please try again in a moment.",
         timestamp: Date.now(),
       };
       setMessages((prev) => [...prev, fallbackMsg]);
