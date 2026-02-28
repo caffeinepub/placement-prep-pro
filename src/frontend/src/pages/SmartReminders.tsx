@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -98,14 +99,25 @@ export function SmartReminders() {
 
   return (
     <div className="p-6 space-y-6 max-w-2xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Smart Reminders
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Stay consistent with scheduled reminders
-        </p>
-      </div>
+      <PageHeader
+        icon={Bell}
+        title="Smart Reminders"
+        subtitle="Stay consistent with scheduled reminders"
+        action={
+          <Button
+            onClick={saveSettings}
+            disabled={updateSettings.isPending}
+            className="gradient-brand text-white border-0 shadow-brand gap-2"
+          >
+            {updateSettings.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
+            Save Settings
+          </Button>
+        }
+      />
 
       {/* Notification permission banner */}
       {notifPermission !== "granted" && (
@@ -287,20 +299,6 @@ export function SmartReminders() {
           background notifications.
         </p>
       </div>
-
-      {/* Save */}
-      <Button
-        onClick={saveSettings}
-        disabled={updateSettings.isPending}
-        className="w-full gradient-brand text-white border-0 shadow-brand gap-2 h-12 text-base font-medium"
-      >
-        {updateSettings.isPending ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Save className="w-5 h-5" />
-        )}
-        Save Reminder Settings
-      </Button>
     </div>
   );
 }

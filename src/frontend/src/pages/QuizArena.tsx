@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -3125,15 +3126,12 @@ export function QuizArena() {
 
   return (
     <div className="p-4 md:p-6 space-y-4 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-2xl md:text-3xl font-display font-bold gradient-brand-text flex items-center gap-2">
-          <Trophy className="w-7 h-7 text-primary" /> Quiz & Company Prep Arena
-        </h1>
-        <div className="flex items-center gap-4 mt-2 flex-wrap">
-          <p className="text-muted-foreground text-sm">
-            Practice coding, aptitude, and company-specific rounds
-          </p>
-          <div className="flex items-center gap-2 ml-auto">
+      <PageHeader
+        icon={Trophy}
+        title="Quiz & Company Prep Arena"
+        subtitle="Practice coding, aptitude, and company-specific rounds"
+        action={
+          <div className="flex items-center gap-2">
             <Badge className="bg-amber-500/10 text-amber-600 border-amber-500/20 gap-1">
               <Zap className="w-3 h-3" /> {gamification.xp} XP
             </Badge>
@@ -3141,8 +3139,8 @@ export function QuizArena() {
               <Star className="w-3 h-3" /> {getLevel(gamification.xp).name}
             </Badge>
           </div>
-        </div>
-      </div>
+        }
+      />
 
       <Tabs defaultValue="coding" className="w-full">
         <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 h-auto gap-1">

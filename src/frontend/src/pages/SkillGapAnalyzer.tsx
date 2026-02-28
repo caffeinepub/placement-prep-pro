@@ -1,4 +1,5 @@
 import { GradientProgress } from "@/components/GradientProgress";
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -185,15 +186,12 @@ export function SkillGapAnalyzer() {
       : 0;
 
   return (
-    <div className="p-6 space-y-6 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Skill Gap Analyzer
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Discover what you need for your dream role
-        </p>
-      </div>
+    <div className="p-5 sm:p-6 space-y-6 max-w-4xl mx-auto">
+      <PageHeader
+        icon={Target}
+        title="Skill Gap Analyzer"
+        subtitle="Discover what you need for your dream role"
+      />
 
       {/* Role selector */}
       <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">

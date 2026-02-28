@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Bell,
   BookOpen,
   Building2,
   Calendar,
   CheckCircle2,
-  Edit3,
   FileText,
   GraduationCap,
   Info,
@@ -16,12 +17,14 @@ import {
   Mail,
   Monitor,
   Moon,
+  Pencil,
   Phone,
   Plus,
   Save,
   Settings,
   Shield,
   Sun,
+  Target,
   Trash2,
   User,
   Users,
@@ -133,6 +136,16 @@ function applyTheme(mode: ThemeMode) {
   }
 }
 
+function getInitials(name?: string): string {
+  if (!name) return "ST";
+  return name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 /* ─────────────────────── Settings Modal ─────────────────────── */
 function SettingsModal({ onClose }: { onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<
@@ -199,13 +212,13 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
       {/* Modal */}
       <div className="relative z-10 w-full max-w-lg bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-border shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl gradient-brand flex items-center justify-center shadow-brand">
-              <Settings className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg gradient-brand flex items-center justify-center shadow-brand">
+              <Settings className="w-3.5 h-3.5 text-white" />
             </div>
             <div>
-              <h2 className="font-display font-bold text-base text-foreground">
+              <h2 className="font-display font-bold text-sm text-foreground leading-tight">
                 Settings
               </h2>
               <p className="text-muted-foreground text-xs">
@@ -216,20 +229,20 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-accent transition-colors duration-150"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex border-b border-border px-5 shrink-0">
+        {/* Tab strip */}
+        <div className="flex border-b border-border px-4 shrink-0">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               type="button"
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-1.5 px-3 py-3 text-xs font-medium border-b-2 transition-colors ${
+              className={`flex items-center gap-1.5 px-3 py-3 text-xs font-medium border-b-2 transition-colors duration-150 ${
                 activeTab === id
                   ? "border-primary text-primary"
                   : "border-transparent text-muted-foreground hover:text-foreground"
@@ -245,8 +258,8 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
         <div className="flex-1 overflow-y-auto p-5">
           {/* Theme */}
           {activeTab === "theme" && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="space-y-2.5">
+              <p className="text-xs text-muted-foreground mb-3">
                 Choose how Gars X looks to you.
               </p>
               {(
@@ -275,27 +288,35 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                   type="button"
                   key={mode}
                   onClick={() => handleTheme(mode)}
-                  className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 text-left transition-all ${
+                  className={`w-full flex items-center gap-4 p-3.5 rounded-xl border-2 text-left transition-all duration-150 ${
                     themeMode === mode
                       ? "border-primary gradient-brand-soft"
-                      : "border-border hover:border-primary/30 bg-muted/30"
+                      : "border-border hover:border-primary/40 bg-muted/20"
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center ${themeMode === mode ? "gradient-brand shadow-brand" : "bg-accent"}`}
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                      themeMode === mode
+                        ? "gradient-brand shadow-brand"
+                        : "bg-accent"
+                    }`}
                   >
                     <Icon
-                      className={`w-5 h-5 ${themeMode === mode ? "text-white" : "text-muted-foreground"}`}
+                      className={`w-4 h-4 ${
+                        themeMode === mode
+                          ? "text-white"
+                          : "text-muted-foreground"
+                      }`}
                     />
                   </div>
-                  <div>
+                  <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm text-foreground">
                       {label}
                     </p>
                     <p className="text-xs text-muted-foreground">{desc}</p>
                   </div>
                   {themeMode === mode && (
-                    <CheckCircle2 className="w-4 h-4 text-primary ml-auto" />
+                    <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                   )}
                 </button>
               ))}
@@ -305,12 +326,10 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
           {/* Reminders */}
           {activeTab === "reminders" && (
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 Manage your study reminders.
               </p>
-
-              {/* Add new */}
-              <div className="flex gap-2 p-3 rounded-xl bg-muted/50 border border-border">
+              <div className="flex gap-2 p-3 rounded-xl bg-muted/40 border border-border">
                 <Input
                   placeholder="Reminder title..."
                   value={newTitle}
@@ -328,13 +347,11 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                   type="button"
                   size="sm"
                   onClick={addReminder}
-                  className="gradient-brand text-white h-8 px-3"
+                  className="gradient-brand text-white h-8 px-3 shadow-brand"
                 >
                   <Plus className="w-3.5 h-3.5" />
                 </Button>
               </div>
-
-              {/* Reminder list */}
               <div className="space-y-2">
                 {reminders.map((r) => (
                   <div
@@ -342,11 +359,17 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                     className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border"
                   >
                     <Bell
-                      className={`w-4 h-4 shrink-0 ${r.enabled ? "text-primary" : "text-muted-foreground"}`}
+                      className={`w-4 h-4 shrink-0 ${
+                        r.enabled ? "text-primary" : "text-muted-foreground"
+                      }`}
                     />
                     <div className="flex-1 min-w-0">
                       <p
-                        className={`text-sm font-medium truncate ${r.enabled ? "text-foreground" : "text-muted-foreground line-through"}`}
+                        className={`text-sm font-medium truncate ${
+                          r.enabled
+                            ? "text-foreground"
+                            : "text-muted-foreground line-through"
+                        }`}
                       >
                         {r.title}
                       </p>
@@ -359,14 +382,14 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                     <button
                       type="button"
                       onClick={() => deleteReminder(r.id)}
-                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 ))}
                 {reminders.length === 0 && (
-                  <p className="text-center text-muted-foreground text-sm py-6">
+                  <p className="text-center text-muted-foreground text-sm py-8">
                     No reminders yet. Add one above!
                   </p>
                 )}
@@ -376,8 +399,8 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
 
           {/* Policy */}
           {activeTab === "policy" && (
-            <div className="space-y-3">
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="space-y-2.5">
+              <p className="text-xs text-muted-foreground mb-3">
                 Read our policies and terms.
               </p>
               {[
@@ -385,27 +408,24 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                   icon: Shield,
                   label: "Privacy Policy",
                   desc: "How we handle your data",
-                  href: "#",
                 },
                 {
                   icon: FileText,
                   label: "Terms & Conditions",
                   desc: "Rules for using Gars X",
-                  href: "#",
                 },
                 {
                   icon: Lock,
                   label: "Data Security",
                   desc: "All data stored locally on your device",
-                  href: "#",
                 },
               ].map(({ icon: Icon, label, desc }) => (
                 <div
                   key={label}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-border bg-muted/30 hover:border-primary/30 transition-colors cursor-pointer"
+                  className="flex items-center gap-4 p-3.5 rounded-xl border border-border bg-muted/20 hover:border-primary/30 transition-colors duration-150 cursor-pointer"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-primary" />
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 text-primary" />
                   </div>
                   <div>
                     <p className="font-medium text-sm text-foreground">
@@ -422,17 +442,17 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
           {activeTab === "about" && (
             <div className="space-y-5">
               <div className="flex flex-col items-center text-center py-4">
-                <div className="w-16 h-16 rounded-2xl gradient-brand flex items-center justify-center shadow-brand mb-3">
-                  <GraduationCap className="w-8 h-8 text-white" />
+                <div className="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center shadow-brand mb-3">
+                  <GraduationCap className="w-7 h-7 text-white" />
                 </div>
                 <h3 className="font-display font-bold text-xl gradient-brand-text">
                   Gars X
                 </h3>
-                <p className="text-muted-foreground text-sm mt-1">
+                <p className="text-muted-foreground text-xs mt-1">
                   Crack Placements Faster
                 </p>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {[
                   { label: "App Name", value: "Gars X" },
                   { label: "Version", value: "1.0.0" },
@@ -446,7 +466,7 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
                 ].map(({ label, value }) => (
                   <div
                     key={label}
-                    className="flex gap-3 p-3 rounded-xl bg-muted/40"
+                    className="flex gap-3 p-3 rounded-lg bg-muted/40"
                   >
                     <span className="text-xs text-muted-foreground w-24 shrink-0 pt-0.5">
                       {label}
@@ -465,13 +485,40 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+/* ─────────────────────── Info Row ─────────────────────── */
+function InfoRow({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: React.FC<{ className?: string }>;
+  label: string;
+  value?: string;
+}) {
+  return (
+    <div className="flex items-center gap-3 py-3">
+      <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+        <Icon className="w-3.5 h-3.5 text-primary/80" />
+      </div>
+      <span className="text-xs font-medium text-muted-foreground w-28 shrink-0">
+        {label}
+      </span>
+      <span className="text-sm text-foreground font-medium leading-snug flex-1 min-w-0 truncate">
+        {value || (
+          <span className="text-muted-foreground/40 font-normal">—</span>
+        )}
+      </span>
+    </div>
+  );
+}
+
 /* ─────────────────────── Main Component ─────────────────────── */
 export function StudentDetails() {
   const [profile, setProfile] = useState<StudentProfile>(getProfile);
-  const [editing, setEditing] = useState(false);
   const [saved, setSaved] = useState(false);
   const [form, setForm] = useState<StudentProfile>({});
   const [showSettings, setShowSettings] = useState(false);
+  const [activeTab, setActiveTab] = useState<"overview" | "edit">("overview");
 
   useEffect(() => {
     setProfile(getProfile());
@@ -479,20 +526,20 @@ export function StudentDetails() {
 
   const startEdit = () => {
     setForm({ ...profile });
-    setEditing(true);
+    setActiveTab("edit");
     setSaved(false);
   };
 
   const handleSave = () => {
     saveProfile(form);
-    setProfile({ ...profile, ...form });
-    setEditing(false);
+    setProfile((prev) => ({ ...prev, ...form }));
+    setActiveTab("overview");
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
 
   const handleCancel = () => {
-    setEditing(false);
+    setActiveTab("overview");
   };
 
   const field = (key: keyof StudentProfile) => form[key] ?? "";
@@ -501,96 +548,88 @@ export function StudentDetails() {
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setForm((f) => ({ ...f, [key]: e.target.value }));
 
-  return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center shadow-brand">
-              <User className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-display font-bold text-foreground">
-                Student Profile
-              </h1>
-              <p className="text-muted-foreground text-sm">
-                Your personal and academic details
-              </p>
-            </div>
-          </div>
-          {/* Settings Button */}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSettings(true)}
-            className="flex items-center gap-2 border-primary/30 text-primary hover:bg-primary/5"
-          >
-            <Settings className="w-4 h-4" />
-            Settings
-          </Button>
-        </div>
+  const selectClass =
+    "w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring text-foreground transition-colors duration-150";
 
-        {/* Avatar + name hero card */}
-        <div className="relative rounded-2xl overflow-hidden mb-6 bg-card border border-border shadow-sm">
-          {/* gradient strip */}
-          <div className="h-24 gradient-brand opacity-80" />
-          <div className="px-6 pb-6">
-            {/* Avatar */}
-            <div className="-mt-10 mb-4 flex items-end gap-4">
-              <div className="w-20 h-20 rounded-2xl gradient-brand shadow-brand flex items-center justify-center border-4 border-card">
-                <span className="text-white text-2xl font-bold">
-                  {profile.fullName
-                    ? profile.fullName
-                        .split(" ")
-                        .map((w) => w[0])
-                        .join("")
-                        .toUpperCase()
-                        .slice(0, 2)
-                    : "ST"}
+  return (
+    <div className="min-h-screen bg-background">
+      <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
+        {/* ── Profile Hero ── */}
+        <div className="rounded-2xl overflow-hidden mb-6 bg-card border border-border shadow-card">
+          {/* Cover — gradient with subtle dot grid */}
+          <div className="h-28 gradient-brand relative overflow-hidden">
+            <div
+              className="absolute inset-0 opacity-[0.15]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, white 1px, transparent 1px)",
+                backgroundSize: "22px 22px",
+              }}
+            />
+            {/* Settings button positioned in cover */}
+            <button
+              type="button"
+              onClick={() => setShowSettings(true)}
+              className="absolute top-3 right-3 flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20 transition-all duration-150"
+            >
+              <Settings className="w-3.5 h-3.5" />
+              Settings
+            </button>
+          </div>
+
+          {/* Avatar + name row */}
+          <div className="px-5 pb-5">
+            <div className="flex items-end justify-between -mt-10 mb-4">
+              {/* Large circular avatar with white ring */}
+              <div className="w-[76px] h-[76px] rounded-full gradient-brand shadow-brand flex items-center justify-center ring-4 ring-card shrink-0">
+                <span className="text-white text-2xl font-bold font-display leading-none">
+                  {getInitials(profile.fullName)}
                 </span>
               </div>
-              <div className="pb-1 flex-1 min-w-0">
-                <p className="text-foreground text-lg font-bold truncate">
-                  {profile.fullName || "Student Name"}
-                </p>
-                <p className="text-muted-foreground text-sm truncate">
-                  {profile.email || "—"}
-                </p>
-              </div>
-              {!editing && (
+              {/* Edit button — only in overview */}
+              {activeTab === "overview" && (
                 <Button
                   type="button"
                   size="sm"
                   onClick={startEdit}
-                  className="gradient-brand text-white shadow-brand hover:opacity-90 transition-opacity shrink-0"
+                  className="h-8 text-xs gap-1.5 gradient-brand text-white shadow-brand hover:opacity-90 active:scale-95 transition-all duration-150 mb-0.5"
                 >
-                  <Edit3 className="w-3.5 h-3.5 mr-1.5" />
-                  Edit
+                  <Pencil className="w-3 h-3" />
+                  Edit Profile
                 </Button>
               )}
             </div>
 
-            {/* Badges */}
-            <div className="flex flex-wrap gap-2">
+            {/* Name + email */}
+            <div className="mb-4">
+              <h1 className="text-xl font-display font-bold text-foreground leading-tight tracking-tight">
+                {profile.fullName || "Student Name"}
+              </h1>
+              <p className="text-muted-foreground text-sm mt-0.5">
+                {profile.email || "—"}
+              </p>
+            </div>
+
+            {/* Badge strip */}
+            <div className="flex flex-wrap gap-1.5">
               {profile.year && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
                   {yearLabels[profile.year] ?? `${profile.year} Year`}
                 </span>
               )}
               {profile.branch && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-accent text-accent-foreground">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent text-accent-foreground border border-border/50">
                   {profile.branch}
                 </span>
               )}
               {profile.targetRole && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  <Target className="w-3 h-3" />
                   {roleLabels[profile.targetRole] ?? profile.targetRole}
                 </span>
               )}
               {profile.skillLevel && (
-                <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 capitalize">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 capitalize">
                   {profile.skillLevel}
                 </span>
               )}
@@ -598,273 +637,320 @@ export function StudentDetails() {
           </div>
         </div>
 
-        {/* Detail cards */}
-        {!editing ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <DetailCard
-              icon={<Building2 className="w-4 h-4" />}
-              label="College"
-              value={profile.college}
-            />
-            <DetailCard
-              icon={<BookOpen className="w-4 h-4" />}
-              label="Branch"
-              value={profile.branch}
-            />
-            <DetailCard
-              icon={<Phone className="w-4 h-4" />}
-              label="Mobile Number"
-              value={profile.phone}
-            />
-            <DetailCard
-              icon={<Mail className="w-4 h-4" />}
-              label="Email"
-              value={profile.email}
-            />
-            <DetailCard
-              icon={<Calendar className="w-4 h-4" />}
-              label="Date of Birth"
-              value={profile.dob}
-            />
-            <DetailCard
-              icon={<Users className="w-4 h-4" />}
-              label="Gender"
-              value={
-                profile.gender === "male"
-                  ? "Male"
-                  : profile.gender === "female"
-                    ? "Female"
-                    : profile.gender === "other"
-                      ? "Other"
-                      : profile.gender
-              }
-            />
-            <DetailCard
-              icon={<GraduationCap className="w-4 h-4" />}
-              label="Year"
-              value={
-                profile.year
-                  ? (yearLabels[profile.year] ?? `${profile.year} Year`)
-                  : undefined
-              }
-            />
-            <DetailCard
-              icon={<User className="w-4 h-4" />}
-              label="Target Role"
-              value={
-                profile.targetRole
-                  ? (roleLabels[profile.targetRole] ?? profile.targetRole)
-                  : undefined
-              }
-            />
-          </div>
-        ) : (
-          /* Edit form */
-          <div className="rounded-2xl bg-card border border-border shadow-sm p-6 space-y-5">
-            <h2 className="text-base font-semibold text-foreground">
-              Edit Details
-            </h2>
+        {/* ── Tabs ── */}
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => {
+            if (v === "edit") startEdit();
+            else setActiveTab("overview");
+          }}
+        >
+          <TabsList className="w-full mb-5 bg-muted/60 h-9">
+            <TabsTrigger
+              value="overview"
+              className="flex-1 text-xs font-medium"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="edit" className="flex-1 text-xs font-medium">
+              Edit Profile
+            </TabsTrigger>
+          </TabsList>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Full Name */}
-              <div className="space-y-1.5">
-                <Label htmlFor="fullName" className="text-sm">
-                  Full Name
-                </Label>
-                <Input
-                  id="fullName"
-                  value={field("fullName")}
-                  onChange={set("fullName")}
-                  placeholder="Your full name"
+          {/* ── Overview tab ── */}
+          <TabsContent value="overview" className="mt-0">
+            <div className="rounded-2xl bg-card border border-border shadow-card overflow-hidden">
+              {/* Contact Info group */}
+              <div className="px-5 pt-4 pb-0">
+                <p className="text-[10px] font-semibold text-muted-foreground/50 tracking-widest uppercase">
+                  Contact Info
+                </p>
+              </div>
+              <div className="px-5 pb-1">
+                <InfoRow icon={Mail} label="Email" value={profile.email} />
+                <Separator className="opacity-40" />
+                <InfoRow icon={Phone} label="Mobile" value={profile.phone} />
+              </div>
+
+              <Separator />
+
+              {/* Academic Info group */}
+              <div className="px-5 pt-4 pb-0">
+                <p className="text-[10px] font-semibold text-muted-foreground/50 tracking-widest uppercase">
+                  Academic Info
+                </p>
+              </div>
+              <div className="px-5 pb-3">
+                <InfoRow
+                  icon={Building2}
+                  label="College"
+                  value={profile.college}
                 />
-              </div>
-
-              {/* Email */}
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-sm">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={field("email")}
-                  onChange={set("email")}
-                  placeholder="you@example.com"
+                <Separator className="opacity-40" />
+                <InfoRow
+                  icon={BookOpen}
+                  label="Branch"
+                  value={profile.branch}
                 />
-              </div>
-
-              {/* College */}
-              <div className="space-y-1.5">
-                <Label htmlFor="college" className="text-sm">
-                  College
-                </Label>
-                <Input
-                  id="college"
-                  value={field("college")}
-                  onChange={set("college")}
-                  placeholder="College name"
+                <Separator className="opacity-40" />
+                <InfoRow
+                  icon={GraduationCap}
+                  label="Year"
+                  value={
+                    profile.year
+                      ? (yearLabels[profile.year] ?? `${profile.year} Year`)
+                      : undefined
+                  }
                 />
-              </div>
-
-              {/* Branch */}
-              <div className="space-y-1.5">
-                <Label htmlFor="branch" className="text-sm">
-                  Branch
-                </Label>
-                <Input
-                  id="branch"
-                  value={field("branch")}
-                  onChange={set("branch")}
-                  placeholder="e.g. CSE, ECE, Mech"
+                <Separator className="opacity-40" />
+                <InfoRow
+                  icon={Calendar}
+                  label="Date of Birth"
+                  value={profile.dob}
                 />
-              </div>
-
-              {/* Mobile */}
-              <div className="space-y-1.5">
-                <Label htmlFor="phone" className="text-sm">
-                  Mobile Number
-                </Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={field("phone")}
-                  onChange={set("phone")}
-                  placeholder="+91 XXXXX XXXXX"
+                <Separator className="opacity-40" />
+                <InfoRow
+                  icon={Users}
+                  label="Gender"
+                  value={
+                    profile.gender === "male"
+                      ? "Male"
+                      : profile.gender === "female"
+                        ? "Female"
+                        : profile.gender === "other"
+                          ? "Other"
+                          : profile.gender === "prefer_not"
+                            ? "Prefer not to say"
+                            : profile.gender
+                  }
                 />
-              </div>
-
-              {/* DOB */}
-              <div className="space-y-1.5">
-                <Label htmlFor="dob" className="text-sm">
-                  Date of Birth
-                </Label>
-                <Input
-                  id="dob"
-                  type="date"
-                  value={field("dob")}
-                  onChange={set("dob")}
+                <Separator className="opacity-40" />
+                <InfoRow
+                  icon={User}
+                  label="Target Role"
+                  value={
+                    profile.targetRole
+                      ? (roleLabels[profile.targetRole] ?? profile.targetRole)
+                      : undefined
+                  }
                 />
-              </div>
-
-              {/* Gender */}
-              <div className="space-y-1.5">
-                <Label htmlFor="gender" className="text-sm">
-                  Gender
-                </Label>
-                <select
-                  id="gender"
-                  value={field("gender")}
-                  onChange={set("gender")}
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring text-foreground"
-                >
-                  <option value="">Select gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                  <option value="prefer_not">Prefer not to say</option>
-                </select>
-              </div>
-
-              {/* Year */}
-              <div className="space-y-1.5">
-                <Label htmlFor="year" className="text-sm">
-                  Year
-                </Label>
-                <select
-                  id="year"
-                  value={field("year")}
-                  onChange={set("year")}
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring text-foreground"
-                >
-                  <option value="">Select year</option>
-                  <option value="1">1st Year</option>
-                  <option value="2">2nd Year</option>
-                  <option value="3">3rd Year</option>
-                  <option value="4">4th Year</option>
-                </select>
-              </div>
-
-              {/* Target Role */}
-              <div className="space-y-1.5 sm:col-span-2">
-                <Label htmlFor="targetRole" className="text-sm">
-                  Target Role
-                </Label>
-                <select
-                  id="targetRole"
-                  value={field("targetRole")}
-                  onChange={set("targetRole")}
-                  className="w-full h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring text-foreground"
-                >
-                  <option value="">Select target role</option>
-                  <option value="sde">Software Developer</option>
-                  <option value="aiml">AIML Engineer</option>
-                  <option value="data">Data Analyst</option>
-                  <option value="core">Core (Non-IT)</option>
-                </select>
               </div>
             </div>
+          </TabsContent>
 
-            {/* Actions */}
-            <div className="flex gap-3 pt-2">
-              <Button
-                type="button"
-                onClick={handleSave}
-                className="gradient-brand text-white shadow-brand hover:opacity-90 flex-1"
-              >
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCancel}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
+          {/* ── Edit tab ── */}
+          <TabsContent value="edit" className="mt-0">
+            <div className="rounded-2xl bg-card border border-border shadow-card p-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="fullName"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Full Name
+                  </Label>
+                  <Input
+                    id="fullName"
+                    value={field("fullName")}
+                    onChange={set("fullName")}
+                    placeholder="Your full name"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="email"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={field("email")}
+                    onChange={set("email")}
+                    placeholder="you@example.com"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="college"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    College
+                  </Label>
+                  <Input
+                    id="college"
+                    value={field("college")}
+                    onChange={set("college")}
+                    placeholder="College name"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="branch"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Branch
+                  </Label>
+                  <Input
+                    id="branch"
+                    value={field("branch")}
+                    onChange={set("branch")}
+                    placeholder="e.g. CSE, ECE"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="phone"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Mobile Number
+                  </Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={field("phone")}
+                    onChange={set("phone")}
+                    placeholder="+91 XXXXX XXXXX"
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="dob"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Date of Birth
+                  </Label>
+                  <Input
+                    id="dob"
+                    type="date"
+                    value={field("dob")}
+                    onChange={set("dob")}
+                    className="h-9"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="gender"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Gender
+                  </Label>
+                  <select
+                    id="gender"
+                    value={field("gender")}
+                    onChange={set("gender")}
+                    className={selectClass}
+                  >
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer_not">Prefer not to say</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="year"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Year
+                  </Label>
+                  <select
+                    id="year"
+                    value={field("year")}
+                    onChange={set("year")}
+                    className={selectClass}
+                  >
+                    <option value="">Select year</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1.5 sm:col-span-2">
+                  <Label
+                    htmlFor="targetRole"
+                    className="text-xs font-medium text-muted-foreground"
+                  >
+                    Target Role
+                  </Label>
+                  <select
+                    id="targetRole"
+                    value={field("targetRole")}
+                    onChange={set("targetRole")}
+                    className={selectClass}
+                  >
+                    <option value="">Select target role</option>
+                    <option value="sde">Software Developer</option>
+                    <option value="aiml">AIML Engineer</option>
+                    <option value="data">Data Analyst</option>
+                    <option value="core">Core (Non-IT)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-3 pt-1">
+                <Button
+                  type="button"
+                  onClick={handleSave}
+                  className="gradient-brand text-white shadow-brand hover:opacity-90 active:scale-95 flex-1 h-9 transition-all duration-150"
+                >
+                  <Save className="w-3.5 h-3.5 mr-2" />
+                  Save Changes
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="flex-1 h-9"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          </TabsContent>
+        </Tabs>
 
-        {/* Saved toast */}
-        {saved && (
-          <div className="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-green-600 text-white px-5 py-3 rounded-full shadow-lg text-sm font-medium animate-in fade-in slide-in-from-bottom-4">
-            <CheckCircle2 className="w-4 h-4" />
-            Profile saved successfully!
-          </div>
-        )}
+        {/* Footer */}
+        <footer className="text-center text-xs text-muted-foreground py-6 mt-2 border-t border-border/40">
+          © {new Date().getFullYear()}. Built with ❤️ using{" "}
+          <a
+            href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary hover:underline"
+          >
+            caffeine.ai
+          </a>
+        </footer>
       </div>
+
+      {/* Saved toast */}
+      {saved && (
+        <div className="fixed bottom-20 lg:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-emerald-600 text-white px-5 py-3 rounded-full shadow-lg text-sm font-medium">
+          <CheckCircle2 className="w-4 h-4" />
+          Profile saved successfully!
+        </div>
+      )}
 
       {/* Settings Modal */}
       {showSettings && <SettingsModal onClose={() => setShowSettings(false)} />}
-    </div>
-  );
-}
-
-function DetailCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value?: string;
-}) {
-  return (
-    <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border hover:border-primary/30 transition-colors">
-      <span className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0 mt-0.5">
-        {icon}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-muted-foreground text-xs mb-0.5">{label}</p>
-        <p className="text-foreground text-sm font-medium truncate">
-          {value || (
-            <span className="text-muted-foreground/50 font-normal italic">
-              Not set
-            </span>
-          )}
-        </p>
-      </div>
     </div>
   );
 }

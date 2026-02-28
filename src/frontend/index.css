@@ -201,6 +201,18 @@
     backdrop-filter: blur(12px);
     background: oklch(var(--card) / 0.8);
   }
+
+  /* Professional page header border bottom */
+  .page-header-divider {
+    border-bottom: 1px solid oklch(var(--border) / 0.6);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Consistent interactive transitions */
+  .interactive {
+    @apply transition-all duration-200 cursor-pointer;
+  }
 }
 
 /* Print styles for resume */

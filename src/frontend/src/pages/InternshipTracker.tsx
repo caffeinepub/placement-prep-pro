@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -198,24 +199,21 @@ export function InternshipTracker() {
     stats.total > 0 ? Math.round((stats.selected / stats.total) * 100) : 0;
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl mx-auto">
-      <div className="flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <h1 className="text-3xl font-display font-bold gradient-brand-text">
-            Internship Tracker
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Track all your internship applications in one place
-          </p>
-        </div>
-        <Button
-          onClick={() => setShowAdd(true)}
-          className="gradient-brand text-white border-0 shadow-brand gap-2"
-        >
-          <Plus className="w-4 h-4" />
-          Add Application
-        </Button>
-      </div>
+    <div className="p-5 sm:p-6 space-y-6 max-w-5xl mx-auto">
+      <PageHeader
+        icon={Briefcase}
+        title="Internship Tracker"
+        subtitle="Track all your internship applications in one place"
+        action={
+          <Button
+            onClick={() => setShowAdd(true)}
+            className="gradient-brand text-white border-0 shadow-brand gap-2 h-9 text-sm"
+          >
+            <Plus className="w-4 h-4" />
+            Add Application
+          </Button>
+        }
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

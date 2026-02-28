@@ -1,5 +1,6 @@
 import { DonutChart } from "@/components/DonutChart";
 import { GradientProgress } from "@/components/GradientProgress";
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,7 +21,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Slider } from "@/components/ui/slider";
 import { useSkills, useUpdateSkills } from "@/hooks/useQueries";
-import { Calendar, Edit2, Loader2 } from "lucide-react";
+import { BarChart2, Calendar, Edit2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { Skill } from "../backend.d";
@@ -167,15 +168,12 @@ export function Skills() {
   const advancedCount = skills.filter((s) => Number(s.level) === 2).length;
 
   return (
-    <div className="p-6 space-y-6 max-w-5xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Skills Tracker
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Track your progress across all core placement skills
-        </p>
-      </div>
+    <div className="p-5 sm:p-6 space-y-6 max-w-5xl mx-auto">
+      <PageHeader
+        icon={BarChart2}
+        title="Skills Tracker"
+        subtitle="Track your progress across all core placement skills"
+      />
 
       {/* Summary */}
       <div className="grid grid-cols-3 gap-4">

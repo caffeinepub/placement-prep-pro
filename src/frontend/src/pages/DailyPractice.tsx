@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,7 @@ import {
   useSolvedQuestions,
   useUserProfile,
 } from "@/hooks/useQueries";
-import { CheckCircle2, Clock, Filter, Flame, Loader2 } from "lucide-react";
+import { CheckCircle2, Clock, Filter, Flame, Loader2, Zap } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import type { PracticeQuestion } from "../backend.d";
@@ -204,14 +205,21 @@ export function DailyPractice() {
 
   return (
     <div className="p-6 space-y-6 max-w-5xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Daily Practice
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Solve problems daily to maintain your streak
-        </p>
-      </div>
+      <PageHeader
+        icon={Zap}
+        title="Daily Practice"
+        subtitle="Solve problems daily to maintain your streak"
+        action={
+          streak > 0 ? (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/10 border border-orange-500/20">
+              <Flame className="w-4 h-4 text-orange-500" />
+              <span className="text-sm font-bold text-orange-500">
+                {streak} Day Streak
+              </span>
+            </div>
+          ) : undefined
+        }
+      />
 
       {/* Streak banner */}
       <Card className="border-0 overflow-hidden">

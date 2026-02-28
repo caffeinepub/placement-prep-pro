@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import {
   ChevronUp,
   Loader2,
   MessageSquare,
+  Mic,
   Save,
   Star,
 } from "lucide-react";
@@ -186,14 +188,11 @@ export function MockInterview() {
 
   return (
     <div className="p-6 space-y-6 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Mock Interview
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Practice HR and technical questions before placement
-        </p>
-      </div>
+      <PageHeader
+        icon={Mic}
+        title="Mock Interview"
+        subtitle="Practice HR and technical questions before placement"
+      />
 
       {/* Performance summary */}
       <div className="grid grid-cols-3 gap-4">

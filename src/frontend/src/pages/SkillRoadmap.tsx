@@ -1,4 +1,5 @@
 import { GradientProgress } from "@/components/GradientProgress";
+import { PageHeader } from "@/components/PageHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import {
   Circle,
   ExternalLink,
   FileText,
+  Map as MapIcon,
   PlayCircle,
   RotateCcw,
 } from "lucide-react";
@@ -1712,15 +1714,12 @@ function MonthCard({ month, index }: { month: MonthData; index: number }) {
 
 export function SkillRoadmap() {
   return (
-    <div className="p-6 space-y-6 max-w-4xl mx-auto">
-      <div>
-        <h1 className="text-3xl font-display font-bold gradient-brand-text">
-          Skill Roadmap
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Your 12-month placement preparation journey
-        </p>
-      </div>
+    <div className="p-5 sm:p-6 space-y-6 max-w-4xl mx-auto">
+      <PageHeader
+        icon={MapIcon}
+        title="Skill Roadmap"
+        subtitle="Your 12-month placement preparation journey"
+      />
 
       {/* Overview pills */}
       <div className="flex gap-3 flex-wrap">

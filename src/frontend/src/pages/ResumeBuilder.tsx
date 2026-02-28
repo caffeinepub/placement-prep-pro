@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -249,46 +250,46 @@ export function ResumeBuilder() {
   };
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      <div className="flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <h1 className="text-3xl font-display font-bold gradient-brand-text">
-            Resume Builder
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Create an ATS-friendly resume for placement
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setShowPreview(!showPreview)}
-            className="gap-2"
-          >
-            {showPreview ? (
-              <EyeOff className="w-4 h-4" />
-            ) : (
-              <Eye className="w-4 h-4" />
-            )}
-            {showPreview ? "Hide Preview" : "Preview"}
-          </Button>
-          <Button onClick={downloadPDF} variant="outline" className="gap-2">
-            <Download className="w-4 h-4" />
-            Download PDF
-          </Button>
-          <Button
-            onClick={saveResume}
-            disabled={updateResume.isPending}
-            className="gradient-brand text-white border-0 shadow-brand gap-2"
-          >
-            {updateResume.isPending && (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            )}
-            Save Resume
-          </Button>
-        </div>
-      </div>
-
+    <div className="p-5 sm:p-6 space-y-6 max-w-7xl mx-auto">
+      <PageHeader
+        icon={FileText}
+        title="Resume Builder"
+        subtitle="Create an ATS-friendly resume for placement"
+        action={
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              variant="outline"
+              onClick={() => setShowPreview(!showPreview)}
+              className="gap-2 h-9 text-sm"
+            >
+              {showPreview ? (
+                <EyeOff className="w-4 h-4" />
+              ) : (
+                <Eye className="w-4 h-4" />
+              )}
+              {showPreview ? "Hide Preview" : "Preview"}
+            </Button>
+            <Button
+              onClick={downloadPDF}
+              variant="outline"
+              className="gap-2 h-9 text-sm"
+            >
+              <Download className="w-4 h-4" />
+              Download PDF
+            </Button>
+            <Button
+              onClick={saveResume}
+              disabled={updateResume.isPending}
+              className="gradient-brand text-white border-0 shadow-brand gap-2 h-9 text-sm"
+            >
+              {updateResume.isPending && (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              )}
+              Save Resume
+            </Button>
+          </div>
+        }
+      />
       <div
         className={`grid gap-6 ${showPreview ? "lg:grid-cols-2" : "lg:grid-cols-1 max-w-3xl"}`}
       >

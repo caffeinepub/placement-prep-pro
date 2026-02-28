@@ -57,7 +57,28 @@ export function SignupPage({ onSignup, onGoToLogin }: SignupPageProps) {
         gender: form.gender,
       }),
     );
+    localStorage.setItem("ppp_auth", "true");
     onSignup();
+  };
+
+  const handleGoogleSignup = () => {
+    const clientId =
+      "1060725074195-kmeum4crr01uirfl2op9kd5acmi9jutn.apps.googleusercontent.com";
+    const redirectUri = window.location.origin + window.location.pathname;
+    const scope = "openid email profile";
+    const state = btoa(JSON.stringify({ action: "signup", ts: Date.now() }));
+    localStorage.setItem("google_oauth_state", state);
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "token",
+      scope,
+      state,
+      include_granted_scopes: "true",
+    });
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
   };
 
   return (
@@ -406,6 +427,7 @@ export function SignupPage({ onSignup, onGoToLogin }: SignupPageProps) {
           {/* Google signup */}
           <button
             type="button"
+            onClick={handleGoogleSignup}
             className="w-full py-2.5 rounded-full bg-white text-gray-700 font-medium text-sm flex items-center justify-center gap-2.5 shadow-md hover:shadow-lg hover:bg-gray-50 transition-all duration-200"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
