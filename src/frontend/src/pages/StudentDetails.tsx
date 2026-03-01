@@ -442,15 +442,14 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
           {activeTab === "about" && (
             <div className="space-y-5">
               <div className="flex flex-col items-center text-center py-4">
-                <div className="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center shadow-brand mb-3">
-                  <GraduationCap className="w-7 h-7 text-white" />
+                <div className="rounded-2xl overflow-hidden shadow-lg mb-3 w-full max-w-xs">
+                  <img
+                    src="/assets/generated/grasx-logo-banner.dim_1280x640.png"
+                    alt="Gars X Placement Guider"
+                    className="w-full h-auto object-cover"
+                    style={{ imageRendering: "crisp-edges" }}
+                  />
                 </div>
-                <h3 className="font-display font-bold text-xl gradient-brand-text">
-                  Gars X
-                </h3>
-                <p className="text-muted-foreground text-xs mt-1">
-                  Crack Placements Faster
-                </p>
               </div>
               <div className="space-y-1.5">
                 {[
@@ -556,13 +555,13 @@ export function StudentDetails() {
       <div className="max-w-2xl mx-auto px-4 py-6 sm:px-6 sm:py-8">
         {/* ── Profile Hero ── */}
         <div className="rounded-2xl overflow-hidden mb-6 bg-card border border-border shadow-card">
-          {/* Cover — gradient with subtle dot grid */}
-          <div className="h-28 gradient-brand relative overflow-hidden">
+          {/* Cover — subtle muted style */}
+          <div className="h-28 bg-muted/60 dark:bg-muted/30 relative overflow-hidden border-b border-border">
             <div
-              className="absolute inset-0 opacity-[0.15]"
+              className="absolute inset-0 opacity-[0.08]"
               style={{
                 backgroundImage:
-                  "radial-gradient(circle, white 1px, transparent 1px)",
+                  "radial-gradient(circle, currentColor 1px, transparent 1px)",
                 backgroundSize: "22px 22px",
               }}
             />
@@ -570,7 +569,7 @@ export function StudentDetails() {
             <button
               type="button"
               onClick={() => setShowSettings(true)}
-              className="absolute top-3 right-3 flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm border border-white/20 transition-all duration-150"
+              className="absolute top-3 right-3 flex items-center gap-1.5 bg-background/80 hover:bg-background text-foreground text-xs font-medium px-3 py-1.5 rounded-lg backdrop-blur-sm border border-border transition-all duration-150"
             >
               <Settings className="w-3.5 h-3.5" />
               Settings
