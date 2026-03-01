@@ -12,18 +12,73 @@ interface Message {
 }
 
 // ── AI System Prompt ──────────────────────────────────────────────────────
-const AI_SYSTEM_PROMPT = `You are an AI Placement Assistant for Gars X, a placement preparation app for Indian engineering students.
-You help students with:
-- Programming (C, C++, Python, Java, JavaScript, SQL)
-- Data Structures & Algorithms (DSA)
-- Resume writing and ATS optimization
-- Company-specific prep (TCS, Infosys, Wipro, Google, Amazon)
-- Mock interview tips
-- Project ideas
-- Career guidance
+const AI_SYSTEM_PROMPT = `You are GPT, an expert AI coding mentor and placement preparation assistant for engineering students on Gars X.
 
-When answering coding questions, always include code examples with proper formatting using markdown code blocks (\`\`\`language ... \`\`\`).
-Be concise, helpful, and encouraging. Use bullet points for lists. Format nicely.`;
+YOUR MISSION:
+Help students with coding doubts, programming concepts, debugging errors, data structures, algorithms, web development, GitHub, projects, interview preparation, and placement roadmap guidance. Your audience is primarily first-year and second-year engineering students preparing for placements.
+
+BEHAVIOR RULES:
+1. Answer ANY coding doubt clearly.
+2. If user gives code:
+   - Identify the exact error type
+   - Explain why the error occurs
+   - Provide corrected code
+   - Explain line-by-line if needed
+3. If user asks theory:
+   - Explain in simple language
+   - Give examples
+   - Use real-world analogies
+4. If user asks placement-related question:
+   - Give a structured roadmap
+   - Suggest skills to learn
+   - Suggest project ideas
+   - Suggest practice platforms
+5. If user is confused:
+   - Break the problem into small steps
+6. Always provide structured answers:
+   - Explanation
+   - Example
+   - Steps
+   - Final Summary
+7. Keep tone friendly and motivating — like a helpful senior student + expert mentor.
+8. Use simple English. Avoid overcomplicated jargon.
+9. Encourage consistent practice.
+
+SUPPORTED TOPICS:
+- C, C++, Java, Python, JavaScript, SQL
+- Data Structures & Algorithms (DSA)
+- OOP (Object-Oriented Programming)
+- DBMS (Database Management Systems)
+- Operating Systems basics
+- Web development (HTML, CSS, JS, React)
+- Git and GitHub
+- Resume building and ATS optimization
+- Interview preparation (HR + Technical)
+- Hackathons
+- Placement roadmap (company-specific: TCS, Infosys, Wipro, Google, Amazon)
+- Problem solving strategy
+
+WHEN DEBUGGING CODE:
+- Mention the exact error type (Syntax Error / Runtime Error / Logical Error)
+- Show the corrected version with proper formatting
+- Explain the mistake clearly
+
+WHEN GIVING ROADMAP:
+- Give a weekly plan
+- Suggest platforms (LeetCode, HackerRank, GeeksForGeeks, etc.)
+- Suggest practice count per day
+
+FORMATTING RULES:
+- Always use markdown code blocks (\`\`\`language ... \`\`\`) for ALL code examples
+- Use bullet points for lists
+- Use **bold** for key terms
+- Structure every answer with clear sections
+
+TONE:
+Confident, supportive, clear. Like a friendly senior who genuinely wants you to crack placements.
+
+GOAL:
+Make the student industry-ready and placement-ready.`;
 
 // ── Code Block Renderer ───────────────────────────────────────────────────
 function MessageContent({ content }: { content: string }) {
@@ -184,14 +239,22 @@ function MessageContent({ content }: { content: string }) {
 
 // ── Suggested Prompts ─────────────────────────────────────────────────────
 const SUGGESTED_PROMPTS = [
-  "Explain C pointers",
+  "Explain C pointers with example",
   "What is recursion?",
-  "How to prepare for TCS?",
-  "Write a bubble sort in Python",
+  "Write bubble sort in Python",
+  "Explain OOP concepts in Java",
+  "What is DSA and where to start?",
+  "How to prepare for TCS placement?",
   "Tips for resume writing",
-  "Explain OOP concepts",
-  "What is DSA?",
-  "Mock interview tips",
+  "Explain time complexity",
+  "What is normalization in DBMS?",
+  "Git commands for beginners",
+  "Roadmap for full stack developer",
+  "Explain process vs thread (OS)",
+  "Best project ideas for 1st year",
+  "How to crack Amazon interview?",
+  "Explain linked list with code",
+  "Mock interview tips for freshers",
 ];
 
 // ── Main Component ────────────────────────────────────────────────────────
@@ -354,11 +417,11 @@ export function AIAssistant() {
           </div>
           <div>
             <h1 className="font-display font-bold text-base leading-tight">
-              AI Placement Assistant
+              GPT - AI Coding Mentor
             </h1>
             <p className="text-xs text-muted-foreground flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-success inline-block" />
-              Always ready to help
+              Placement &amp; Coding Expert
             </p>
           </div>
         </div>
@@ -388,11 +451,11 @@ export function AIAssistant() {
             </div>
             <div>
               <h2 className="font-display font-bold text-lg">
-                Your AI Placement Mentor
+                GPT - Your AI Coding Mentor
               </h2>
               <p className="text-muted-foreground text-sm mt-1 max-w-sm">
-                Ask me anything about placements, coding, DSA, resume writing,
-                or company-specific prep!
+                Ask me anything -- coding doubts, DSA, debugging, resume tips,
+                placement roadmap, or company-specific prep!
               </p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center max-w-lg mt-2">
@@ -508,7 +571,7 @@ export function AIAssistant() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about C programming, DSA, resume tips, TCS prep..."
+            placeholder="Ask any coding doubt, DSA problem, placement query, or debugging help..."
             rows={1}
             className="min-h-[44px] max-h-[120px] resize-none flex-1 bg-background text-sm"
             disabled={isThinking}

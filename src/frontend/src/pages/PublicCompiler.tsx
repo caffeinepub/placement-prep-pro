@@ -20,13 +20,38 @@ type Language = "python" | "c" | "cpp" | "java";
 const LANGUAGES: {
   id: Language;
   label: string;
-  judgeId: number;
+  pistonLang: string;
+  pistonVersion: string;
   ext: string;
 }[] = [
-  { id: "python", label: "Python 3", judgeId: 71, ext: "py" },
-  { id: "c", label: "C (GCC)", judgeId: 50, ext: "c" },
-  { id: "cpp", label: "C++ (GCC)", judgeId: 54, ext: "cpp" },
-  { id: "java", label: "Java", judgeId: 62, ext: "java" },
+  {
+    id: "python",
+    label: "Python 3",
+    pistonLang: "python",
+    pistonVersion: "3.10.0",
+    ext: "py",
+  },
+  {
+    id: "c",
+    label: "C (GCC)",
+    pistonLang: "c",
+    pistonVersion: "10.2.0",
+    ext: "c",
+  },
+  {
+    id: "cpp",
+    label: "C++ (GCC)",
+    pistonLang: "cpp",
+    pistonVersion: "10.2.0",
+    ext: "cpp",
+  },
+  {
+    id: "java",
+    label: "Java",
+    pistonLang: "java",
+    pistonVersion: "15.0.2",
+    ext: "java",
+  },
 ];
 
 const STARTER_CODE: Record<Language, string> = {
@@ -88,19 +113,6 @@ int main() {
 }
 `,
 };
-
-// ── Base64 utilities ──────────────────────────────────────────────────────
-function btoa_utf8(str: string): string {
-  return btoa(unescape(encodeURIComponent(str)));
-}
-
-function atob_utf8(str: string): string {
-  try {
-    return decodeURIComponent(escape(atob(str)));
-  } catch {
-    return atob(str);
-  }
-}
 
 // ── Execution result type ─────────────────────────────────────────────────
 interface ExecResult {
@@ -603,23 +615,18 @@ export function PublicCompiler({ onBack }: PublicCompilerProps) {
     const lang = LANGUAGES.find((l) => l.id === language)!;
 
     try {
-      const response = await fetch(
-        "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=true",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-            "X-RapidAPI-Key":
-              "2a3a4c0f30msh2c3ed6db6f31a94p1c12c2jsn5f9b5b3a1e0d",
-          },
-          body: JSON.stringify({
-            language_id: lang.judgeId,
-            source_code: btoa_utf8(code),
-            stdin: "",
-          }),
+      const response = await fetch("https://emkc.org/api/v2/piston/execute", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          language: lang.pistonLang,
+          version: lang.pistonVersion,
+          files: [{ name: `main.${lang.ext}`, content: code }],
+          stdin: "",
+        }),
+      });
 
       if (!response.ok) {
         const errText = await response.text();
@@ -629,16 +636,22 @@ export function PublicCompiler({ onBack }: PublicCompilerProps) {
       }
 
       const data = await response.json();
+      const run = data.run ?? {};
+      const compile = data.compile ?? {};
+
+      const stdout = run.stdout ?? "";
+      const stderr = run.stderr ?? "";
+      const compileOutput = compile.stderr ?? compile.stdout ?? "";
+      const exitCode = run.code ?? 0;
+      const statusDesc = exitCode === 0 ? "Accepted" : "Runtime Error";
 
       setResult({
-        stdout: data.stdout ? atob_utf8(data.stdout) : "",
-        stderr: data.stderr ? atob_utf8(data.stderr) : "",
-        compile_output: data.compile_output
-          ? atob_utf8(data.compile_output)
-          : "",
-        status: data.status ?? { id: 0, description: "Unknown" },
-        time: data.time ?? null,
-        memory: data.memory ?? null,
+        stdout,
+        stderr,
+        compile_output: compileOutput,
+        status: { id: exitCode === 0 ? 3 : 11, description: statusDesc },
+        time: run.cpu_time != null ? String(run.cpu_time) : null,
+        memory: run.memory ?? null,
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Unknown network error";
